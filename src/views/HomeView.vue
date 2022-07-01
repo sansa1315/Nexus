@@ -1,8 +1,22 @@
 <template>
   <div class="container">
     
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <FilterTransaction/>
+    <HelloWorld msg="Welcome to Nexus API app"/>
+    <div class="columns ">
+      <div class="column m-auto">
+        <FilterTransaction/>
+      </div>
+      <div class="column">
+        <b-field label="Order alphabetically" 
+            type="is-info">        
+            <b-select placeholder="Select order" v-model="order" @input="actionSortTransaction(order)">
+                <option value="up" >A-Z</option>
+                <option value="" >Z-A</option>
+            </b-select>                        
+        </b-field>
+      </div>
+    </div>
+    
      
     <div class="onHover box mb-1 is-flex is-justify-content-space-between is-align-items-center"
        v-for="(transaction,i) in transactions" :key="i" @click="actionShowDetail(transaction)"> 
@@ -23,12 +37,12 @@ export default {
   name: 'HomeView',
   data(){
     return{
-      
+      order:''
       
     }
   },
   methods:{
-    ...mapActions(['actionGetTransaction','actionIncrementar','actionShowDetail']),            
+    ...mapActions(['actionGetTransaction','actionIncrementar','actionShowDetail','actionSortTransaction']),            
     deleteConfirmation(id){
       this.$buefy.dialog.confirm({
             title: 'Delete transaction',
@@ -73,11 +87,6 @@ export default {
 </script>
 
 <style scoped>
-  p{
-    
-
-  }
-
   .red{
     color:red
   }
@@ -86,6 +95,5 @@ export default {
     background-color: lightgray;
     cursor: pointer;
   }
-  
   
 </style>
