@@ -29,6 +29,7 @@ export default new Vuex.Store({
       })
     },
     showDetail:function (state,transaction) {
+      transaction.date = new Date(transaction.date)
       app.$router.push({
         name:"detail",
         params:{
