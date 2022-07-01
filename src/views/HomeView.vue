@@ -2,9 +2,10 @@
   <div class="container">
     
     <HelloWorld msg="Welcome to Your Vue.js App"/>
-       
-    <div class="onHover box mb-1 is-flex is-justify-content-space-between"
-       v-for="(transaction,i) in transactions" :key="i" @click="showDetail(transaction)"> 
+    <FilterTransaction/>
+     
+    <div class="onHover box mb-1 is-flex is-justify-content-space-between is-align-items-center"
+       v-for="(transaction,i) in transactions" :key="i" @click="actionShowDetail(transaction)"> 
       <p class="">{{transaction.concept}}</p>
       <b-button type="is-danger" @click.stop="deleteConfirmation(transaction.id)" outlined>Delete</b-button>
     </div>
@@ -14,37 +15,20 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import FilterTransaction from '@/components/TransactionFilter.vue'
 import axios from "axios"
+import {mapState, mapActions} from 'vuex'
 
 export default {
   name: 'HomeView',
   data(){
     return{
-      transactions:[],
-      baseUrl:"http://63.135.170.173:5000/",
-      userId:"799acffc-79be-4e6a-bb72-3865c5c91abe",
+      
       
     }
   },
   methods:{
-    getTransaction:function () {
-      axios.get(this.baseUrl + "transactions",{
-        headers:{"Authorization": this.userId}
-      }).then(response => {
-        this.transactions = response.data.data        
-      }).catch(e => console.log(e))
-    },
-    clickOnTransaction:function (transaction) {
-      console.log(transaction)
-    },
-    showDetail:function (transaction) {
-      this.$router.push({
-        name:"detail",
-        params:{
-          transaction
-        }
-      })
-    },
+    ...mapActions(['actionGetTransaction','actionIncrementar','actionShowDetail']),            
     deleteConfirmation(id){
       this.$buefy.dialog.confirm({
             title: 'Delete transaction',
@@ -65,7 +49,7 @@ export default {
                 })
       }).catch(e => {        
         this.$buefy.toast.open({
-                    message: e.message,
+                    message: "something has gone wrong: " + e.message,
                     type: 'is-danger',
                     duration:5000
                 })
@@ -75,13 +59,14 @@ export default {
     
   },
   computed:{
+    ...mapState(['transactions', 'baseUrl', 'userId'])
      
   },
   components: {
-    HelloWorld
+    HelloWorld, FilterTransaction
   },
   created(){
-    this.getTransaction();
+    this.actionGetTransaction()
   }
 
 }
