@@ -1,26 +1,9 @@
 <template>
   <div class="container">
     
-    <HelloWorld msg="Welcome to Nexus API app"/>
-    <br>
-    <div class="columns ">
-      <div class="column m-auto">
-        <FilterTransaction/>
-      </div>
-      <div class="column">
-        <b-field label="Order alphabetically" 
-            type="is-info">        
-            <b-select placeholder="Select order" v-model="order" @input="actionSortTransaction(order)">
-                <option value="up" >A-Z</option>
-                <option value="" >Z-A</option>
-            </b-select>                        
-        </b-field>
-      </div>
-      <div class="column">
-        <b-button type="is-info" @click="isModalActivated = !isModalActivated">Create transaction</b-button>
-      </div>
-    </div>
-    <b-modal v-model="isModalActivated">
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <FilterTransaction/>
+    <b-modal v-model="isModalActive">
      <Form/>
     </b-modal>
     <div class="onHover box mb-1 is-flex is-justify-content-space-between is-align-items-center"
