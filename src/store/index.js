@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from "axios"
-import router from '../router'
 import {app} from '@/main'
 
 Vue.use(Vuex)
@@ -37,6 +36,13 @@ export default new Vuex.Store({
         }
       })
     },
+    sortTransaction:function (state, order) {
+      state.transactions.sort((a,b) => {
+        if(a.concept > b.concept) return order == 'up' ? 1 : -1
+        if(a.concept < b.concept) return order == 'up' ? -1 : 1        
+        return 0
+      })
+    }
     
   },
   actions: {
@@ -45,6 +51,9 @@ export default new Vuex.Store({
     },
     actionShowDetail({commit}, transaction){
       commit('showDetail', transaction)
+    },
+    actionSortTransaction({commit}, order){
+      commit('sortTransaction', order)
     }
     
   },
