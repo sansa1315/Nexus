@@ -2,6 +2,7 @@
   <div class="container">
     
     <HelloWorld msg="Welcome to Nexus API app"/>
+    <br>
     <div class="columns ">
       <div class="column m-auto">
         <FilterTransaction/>
@@ -15,9 +16,13 @@
             </b-select>                        
         </b-field>
       </div>
+      <div class="column">
+        <b-button type="is-info" @click="isModalActivated = !isModalActivated">Create transaction</b-button>
+      </div>
     </div>
-    
-     
+    <b-modal v-model="isModalActivated">
+     <Form/>
+    </b-modal>
     <div class="onHover box mb-1 is-flex is-justify-content-space-between is-align-items-center"
        v-for="(transaction,i) in transactions" :key="i" @click="actionShowDetail(transaction)"> 
       <p class="">{{transaction.concept}}</p>
@@ -30,6 +35,7 @@
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import FilterTransaction from '@/components/TransactionFilter.vue'
+import Form from '@/components/Form.vue'
 import axios from "axios"
 import {mapState, mapActions} from 'vuex'
 
@@ -37,7 +43,8 @@ export default {
   name: 'HomeView',
   data(){
     return{
-      order:''
+      order:'',
+      isModalActivated:false
       
     }
   },
@@ -63,7 +70,7 @@ export default {
                 })
       }).catch(e => {        
         this.$buefy.toast.open({
-                    message: "something has gone wrong: " + e.message,
+                    message: "something has gone wrong: " + e.response.data.errorMessage,
                     type: 'is-danger',
                     duration:5000
                 })
@@ -77,7 +84,7 @@ export default {
      
   },
   components: {
-    HelloWorld, FilterTransaction
+    HelloWorld, FilterTransaction, Form
   },
   created(){
     this.actionGetTransaction()

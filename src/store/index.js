@@ -22,7 +22,7 @@ export default new Vuex.Store({
         state.transactions = response.data.data        
       }).catch(e => {
         this.$buefy.toast.open({
-          message: "something has gone wrong: " + e.message,
+          message: "something has gone wrong: " + e.response.data.errorMessage,
           type: 'is-danger',
           duration:5000
         })
