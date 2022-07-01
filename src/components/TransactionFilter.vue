@@ -10,7 +10,10 @@ export default defineComponent({
 
 <template>
     <div>
-        <b-field label="">
+        <b-field label=""
+            :message="specialCharacter ? 'Dont use special Character' : ''"
+            :type=" specialCharacter? 'is-danger' : ''"
+        >
             <b-autocomplete
                 rounded
                 v-model="concept"
@@ -19,10 +22,17 @@ export default defineComponent({
                 icon="magnify"
                 field="concept"
                 clearable
-                @select="transaction => actionShowDetail(transaction)">
+                @select="transaction => actionShowDetail(transaction)"
+                @input="checkSpecialCharacter"
+                >
                 <template #empty>
-                  <div class="red">
-                    No results found
+                  <div class="red">                    
+                        <span v-if="!specialCharacter">
+                            No results found                    
+                        </span>
+                        <span v-if="specialCharacter">
+                            Dont use special Character    
+                        </span> 
                   </div>
                     </template>
             </b-autocomplete>
@@ -36,6 +46,7 @@ export default {
     data(){
         return{
             concept:'',
+            specialCharacter:false
             
         }
     },
@@ -44,6 +55,11 @@ export default {
     },
     computed:{
         ...mapState(['transactions','selected']),
+        checkSpecialCharacter(){
+            if(this.concept == "") return this.specialCharacter = false
+            if(this.concept.match(/\W/)?.length) return this.specialCharacter= true
+
+        },
          filteredDataArray() {
             return this.transactions.filter((option) => {                
                 return option.concept
@@ -57,5 +73,7 @@ export default {
 </script>
 
 <style scoped>
-
+    .red{
+        color: red;
+    }
 </style>
