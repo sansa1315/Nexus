@@ -9,7 +9,7 @@ export default new Vuex.Store({
   state: {
     transactions:[],
     baseUrl:"http://63.135.170.173:5000/",
-    userId:"799acffc-79be-4e6a-bb72-3865c5c91abe",
+    userId:"981ad431-0067-428a-839c-70982db985e1",
     selected:null
   },
   getters: {
@@ -22,7 +22,7 @@ export default new Vuex.Store({
         state.transactions = response.data.data        
       }).catch(e => {
         this.$buefy.toast.open({
-          message: "something has gone wrong: " + e.response.data.errorMessage,
+          message: "something has gone wrong with transactions: " + e.response.data.errorMessage,
           type: 'is-danger',
           duration:5000
         })
