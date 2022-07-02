@@ -50,11 +50,19 @@
 </template>
 
 <script>
+import axios from "axios"
+import {mapState, mapActions} from 'vuex'
+
+
 
 export default {
   data(){
-    return{
-      transaction : {}
+    return {
+      form:{},
+      test:"hola mundo",
+      accounts:[],
+      minDate:null,
+      
     }
   },
   methods:{    
@@ -101,5 +109,26 @@ export default {
       return this.form?.concept.length > 4 && this.form?.description.length > 4 && this.form?.date && parseInt(this.form?.ammount) > 0 
     }
   },
- 
+  computed:{
+    ...mapState(['transactions', 'baseUrl', 'userId']),
+    isDisabled(){
+      return this.form?.concept.length > 4 && this.form?.description.length > 4 && this.form?.date && this.form?.ammount 
+    }
+  },
+  created(){
+    this.$route.params.transaction ? 
+      this.form = this.$route.params.transaction : 
+      this.form = {
+        concept:'',
+        description:'',
+        ammount:0,
+        date:null,
+      }
+   
+  }
 }
+</script>
+
+<style scoped>
+  
+</style>
