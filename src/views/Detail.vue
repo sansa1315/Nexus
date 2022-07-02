@@ -6,7 +6,7 @@
                 <div class="column has-text-left">                                                            
                     <b-field label="Description"
                         :type="form?.description && form?.description.length > 4 ? 'is-success' : 'is-danger'"
-                        :message="form?.description ? 'success' : 'This field cannot be empty'">
+                        :message="form?.description && form?.description.length > 4 ? 'success' : 'This field cannot be empty'">
                         <b-input v-model="form.description" minlength="4"></b-input>
                     </b-field>
 
@@ -30,21 +30,18 @@
                 <div class="column has-text-left">
                     <b-field label="Concept"
                         :type="form?.concept && form?.concept.length > 4 ? 'is-success' : 'is-danger'"
-                        :message="form?.concept ? 'success' : 'This field cannot be empty'">
+                        :message="form?.concept && form?.concept.length > 4 ? 'success' : 'This field cannot be empty'">
                         <b-input v-model="form.concept" minlength="4"></b-input>
-                    </b-field>
+                    </b-field>                    
 
                     <b-field label="Ammount"
-                        :type="form?.ammount ? 'is-success' : 'is-danger'"
-                        :message="form?.ammount ? 'success' : 'This field cannot be empty'">
-                        <b-input type="numeric" v-model="form.ammount" ></b-input>
+                    :message="parseInt(form?.ammount) > 0 ? 'success' : 'This field cannot be empty'">                    
+                      <b-numberinput :type="parseInt(form.ammount) > 0 ? 'is-success' : 'is-danger'" min="0" v-model="form.ammount"></b-numberinput>
                     </b-field>
                    
                       <b-button  type="is-success" 
                         :disabled="!isDisabled" 
-                        @click="updateConfirmation(form)">Update transaction</b-button>
-                    
-                    
+                        @click="updateConfirmation(form)">Update transaction</b-button>                                        
                 </div>                
             </div>            
     
@@ -105,6 +102,12 @@ export default {
 
     }
 
+  },
+  computed:{
+    ...mapState(['transactions', 'baseUrl', 'userId']),
+    isDisabled(){
+      return this.form?.concept.length > 4 && this.form?.description.length > 4 && this.form?.date && parseInt(this.form?.ammount) > 0 
+    }
   },
   computed:{
     ...mapState(['transactions', 'baseUrl', 'userId']),
