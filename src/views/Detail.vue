@@ -65,7 +65,8 @@ export default {
       
     }
   },
-  methods:{    
+  methods:{
+    ...mapActions(['actionGetTransaction']),   
     minDateFunction(){
       let today = new Date()
       this.minDate = new Date(today.setDate(today.getDate() - 1))
@@ -80,25 +81,34 @@ export default {
             onConfirm: () => this.updateTransaction(form)
         })
     },
-    updateTransaction:function (form) {
-      form.candidateId = this.userId; 
-      console.log("form: ", form)    
-      console.log("userId: ", this.userId)    
-      axios.put(this.baseUrl + "transactions/", {
-        body:form,
-        headers:{"Authorization": this.userId}
-      }).then(response => {
-        this.$buefy.toast.open({
-                    message: 'Transaction Deleted',
-                    type: 'is-success'
+    updateTransaction:function (form) {                          
+      fetch(this.baseUrl + "transactions/", {
+                method: "PUT",
+                headers: {
+                    Authorization: this.userId,
+                    'Content-Type': 'application/json'                     
+                },
+                body: JSON.stringify(form),
+                mode:'cors'
                 })
-      }).catch(e => {        
-        this.$buefy.toast.open({
-                    message: "something has gone wrong: " + e.response.data.errorMessage,
-                    type: 'is-danger',
-                    duration:5000
-                })
-      })
+                .then((response) => response.json())
+                .then((data) => {
+                        this.$buefy.toast.open({
+                        message: "Transacction updated",
+                        type: 'is-success',
+                        duration:5000
+                        })
+                      this.actionGetTransaction();
+                      this.form = {}
+                    })
+                .catch((e) => {
+                  // this.$buefy.toast.open({
+                  //     message: "something has gone wrong: " + e.response.data.errorMessage,
+                  //     type: 'is-danger',
+                  //     duration:5000
+                  // })
+                  console.log(e)
+                });
 
     }
 
@@ -109,15 +119,15 @@ export default {
       return this.form?.concept.length > 4 && this.form?.description.length > 4 && this.form?.date && parseInt(this.form?.ammount) > 0 
     }
   },
-  computed:{
-    ...mapState(['transactions', 'baseUrl', 'userId']),
-    isDisabled(){
-      return this.form?.concept.length > 4 && this.form?.description.length > 4 && this.form?.date && this.form?.ammount 
-    }
-  },
   created(){
     this.$route.params.transaction ? 
-      this.form = this.$route.params.transaction : 
+      this.form = {
+        id: this.$route.params.transaction.id,
+        concept: this.$route.params.transaction.concept,
+        description: this.$route.params.transaction.description,
+        ammount: this.$route.params.transaction.ammount,
+        date: this.$route.params.transaction.date
+        } : 
       this.form = {
         concept:'',
         description:'',
