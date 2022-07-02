@@ -68,6 +68,7 @@ export default {
                     message: 'Transaction Deleted',
                     type: 'is-success'
                 })
+                this.actionGetTransaction();
       }).catch(e => {        
         this.$buefy.toast.open({
                     message: "something has gone wrong: " + e.response.data.errorMessage,

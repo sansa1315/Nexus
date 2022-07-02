@@ -9,7 +9,8 @@ export default new Vuex.Store({
   state: {
     transactions:[],
     baseUrl:"http://63.135.170.173:5000/",
-    userId:"981ad431-0067-428a-839c-70982db985e1",
+    // userId:"981ad431-0067-428a-839c-70982db985e1",
+    userId:"799acffc-79be-4e6a-bb72-3865c5c91abe",
     selected:null
   },
   getters: {
@@ -29,13 +30,15 @@ export default new Vuex.Store({
       })
     },
     showDetail:function (state,transaction) {
-      transaction.date = new Date(transaction.date)
-      app.$router.push({
-        name:"detail",
-        params:{
-          transaction
-        }
-      })
+      if(transaction){
+        transaction.date = new Date(transaction.date)
+        app.$router.push({
+          name:"detail",
+          params:{
+            transaction
+          }
+        })
+      }
     },
     sortTransaction:function (state, order) {
       state.transactions.sort((a,b) => {

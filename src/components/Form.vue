@@ -105,7 +105,7 @@ export default {
             fetch(this.baseUrl + "transactions/", {
                 method: "POST",
                 headers: {
-                    Authorization: "799acffc-79be-4e6a-bb72-3865c5c91abe",
+                    Authorization: this.userId,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(this.form),

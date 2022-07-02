@@ -51,15 +51,14 @@ export default {
         }
     },
     methods:{
-        ...mapActions(['actionShowDetail'])
-    },
-    computed:{
-        ...mapState(['transactions','selected']),
+        ...mapActions(['actionShowDetail']),
         checkSpecialCharacter(){
             if(this.concept == "") return this.specialCharacter = false
             if(this.concept.match(/\W/)?.length) return this.specialCharacter= true
-
         },
+    },
+    computed:{
+        ...mapState(['transactions','selected']),
          filteredDataArray() {
             return this.transactions.filter((option) => {                
                 return option.concept
