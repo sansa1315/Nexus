@@ -61,7 +61,7 @@
                 @click="$parent.close()" />
             <b-button
                 :disabled="!isDisabled"
-                @click="createTransaction"
+                @click="createTransaction($parent)"
                 label="Create transaction"
                 type="is-primary" />
         </footer>
@@ -97,11 +97,11 @@ export default {
                     })
             })
         },
-        createTransaction: function () {
+        createTransaction: function (parent) {
             this.form.candidateId = this.userId
             let newDate = new Date(this.form.date)            
-            this.form.date = newDate.toISOString().split("T")[0]
-
+            this.form.date = newDate.toISOString().split("T")[0]            
+            
             fetch(this.baseUrl + "transactions/", {
                 method: "POST",
                 headers: {
@@ -113,13 +113,13 @@ export default {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                        this.$buefy.toast.open({
+                    this.$buefy.toast.open({
                         message: "Transacction created",
                         type: 'is-success',
                         duration:5000
                     })
-                    this.actionGetTransaction();
-                    this.form = {}
+                    this.actionGetTransaction();                    
+                    parent.close()
                     })
                 .catch((e) => {
                         this.$buefy.toast.open({
@@ -134,6 +134,14 @@ export default {
             let today = new Date()
            this.minDate = new Date(today.setDate(today.getDate() - 1))
         },
+        clearForm(){
+           this.form = {
+                concept:'',
+                description:'',
+                ammount:0,
+                date:null,
+            }
+        }
     },        
     computed:{        
         ...mapState(['baseUrl', 'userId']),
@@ -148,12 +156,7 @@ export default {
   created(){
     this.getAccount()
     this.minDateFunction()
-    this.form = {
-        concept:'',
-        description:'',
-        ammount:0,
-        date:null,
-      }
+    this.clearForm()    
     
   }
  
