@@ -16,7 +16,7 @@
                         <b-datepicker
                             ref="datepicker"
                             expanded
-                            :min-date="minDateFunction()"
+                            :min-date="minDate"
                             v-model="form.date"
                             placeholder="Select a date">
                         </b-datepicker>
@@ -61,16 +61,12 @@ export default {
       form:{},
       test:"hola mundo",
       accounts:[],
-      minDate:null,
+      minDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 4),
       
     }
   },
   methods:{
     ...mapActions(['actionGetTransaction']),   
-    minDateFunction(){
-      let today = new Date()
-      this.minDate = new Date(today.setDate(today.getDate() - 1))
-    }, 
     updateConfirmation(form){
       this.$buefy.dialog.confirm({
             title: 'Update transaction',
@@ -102,11 +98,11 @@ export default {
                       this.form = {}
                     })
                 .catch((e) => {
-                  // this.$buefy.toast.open({
-                  //     message: "something has gone wrong: " + e.response.data.errorMessage,
-                  //     type: 'is-danger',
-                  //     duration:5000
-                  // })
+                  this.$buefy.toast.open({
+                      message: "something has gone wrong: " + e.response.data.errorMessage,
+                      type: 'is-danger',
+                      duration:5000
+                  })
                   console.log(e)
                 });
 
